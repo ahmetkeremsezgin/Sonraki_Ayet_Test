@@ -6,163 +6,165 @@
     <title>Sonraki Ayet</title>
     <link rel="icon" type="image/x-icon" href="images/quran.png">
     <style>
-      body {
-    font-family: Arial, sans-serif;
-    background-color: #000; /* Siyah arka plan */
-    color: #333;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    overflow: hidden; /* Arka plan deseninin kaymasını engellemek için */
-}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000; /* Siyah arka plan */
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Arka plan deseninin kaymasını engellemek için */
+        }
 
-.container {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #333;
-    color: #f4f4f4;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    position: relative; /* Konteynerin içinde beşgenlerin düzgün görünmesini sağlamak için */
-    z-index: 1; /* Arka plan desenlerinin üstünde görünmesi için */
-}
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #333;
+            color: #f4f4f4;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative; /* Konteynerin içinde beşgenlerin düzgün görünmesini sağlamak için */
+            z-index: 1; /* Arka plan desenlerinin üstünde görünmesi için */
+            overflow-y: auto; /* Dikey kaydırma özelliği ekle */
+            max-height: 80vh; /* Maksimum yükseklik ayarla */
+        }
 
-h1 {
-    color: #f4c542;
-}
+        h1 {
+            color: #f4c542;
+        }
 
-.radio-group {
-    margin: 20px 0;
-}
+        .radio-group {
+            margin: 20px 0;
+        }
 
-.radio-group label {
-    display: block;
-    background-color: #f4c542;
-    color: #333;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 5px;
-    transition: background-color 0.3s;
-}
+        .radio-group label {
+            display: block;
+            background-color: #f4c542;
+            color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 5px;
+            transition: background-color 0.3s;
+        }
 
-.radio-group input {
-    display: none;
-}
+        .radio-group input {
+            display: none;
+        }
 
-.radio-group input:checked + label {
-    background-color: #f4a542;
-}
+        .radio-group input:checked + label {
+            background-color: #f4a542;
+        }
 
-.radio-group input.error + label {
-    border: 2px solid red;
-}
+        .radio-group input.error + label {
+            border: 2px solid red;
+        }
 
-.radio-group input.correct + label {
-    border: 2px solid green;
-}
+        .radio-group input.correct + label {
+            border: 2px solid green;
+        }
 
-button {
-    background-color: #f4c542;
-    border: none;
-    color: #333;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 20px;
-}
+        button {
+            background-color: #f4c542;
+            border: none;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
 
-button:hover {
-    background-color: #f4a542;
-}
+        button:hover {
+            background-color: #f4a542;
+        }
 
-.confetti {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
+        .confetti {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
 
-.level-selector {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-}
+        .level-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
 
-.level-selector img {
-    width: 100px;
-    height: auto;
-    margin-right: 20px;
-}
+        .level-selector img {
+            width: 100px;
+            height: auto;
+            margin-right: 20px;
+        }
 
-.level-selector select {
-    font-size: 16px;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    background-color: #f4c542;
-    color: #333;
-    cursor: pointer;
-}
+        .level-selector select {
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #f4c542;
+            color: #333;
+            cursor: pointer;
+        }
 
-.level-selector select:focus {
-    border-color: #f4a542;
-    outline: none;
-}
+        .level-selector select:focus {
+            border-color: #f4a542;
+            outline: none;
+        }
 
-.shake {
-    animation: shake 0.5s ease;
-}
+        .shake {
+            animation: shake 0.5s ease;
+        }
 
-@keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    50% { transform: translateX(10px); }
-    75% { transform: translateX(-10px); }
-    100% { transform: translateX(0); }
-}
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
 
-footer {
-    background-color: #333;
-    color: #f4f4f4;
-    padding: 10px;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    border-top: 1px solid #f4c542;
-}
+        footer {
+            background-color: #333;
+            color: #f4f4f4;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            border-top: 1px solid #f4c542;
+        }
 
-footer p {
-    margin: 0;
-}
+        footer p {
+            margin: 0;
+        }
 
-/* Arka plan beşgen desenleri */
-body::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Hafif soluk siyah arka plan */
-    background-image: 
-        radial-gradient(circle, rgba(244, 197, 66, 0.1) 20%, transparent 20%),
-        radial-gradient(circle, rgba(244, 197, 66, 0.1) 20%, transparent 20%),
-        radial-gradient(circle, rgba(244, 197, 66, 0.1) 20%, transparent 20%),
-        radial-gradient(circle, rgba(244, 197, 66, 0.1) 20%, transparent 20%),
-        radial-gradient(circle, rgba(244, 197, 66, 0.1) 20%, transparent 20%);
-    background-size: 60px 60px; /* Beşgenlerin boyutu */
-    background-position: 0 0, 30px 30px, 0 30px, 30px 0px, 15px 15px; /* Beşgenlerin konumları */
-    z-index: 0; /* İçeriğin arkasında olması için */
-}
+        /* Arka plan beşgen desenleri */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Hafif soluk siyah arka plan */
+            background-image: 
+                radial-gradient(circle, rgba(244, 197, 66, 0.1) 20%, transparent 20%),
+                radial-gradient(circle, rgba(244, 197, 66, 0.1) 20%, transparent 20%),
+                radial-gradient(circle, rgba(244, 197, 66, 0.1) 20%, transparent 20%),
+                radial-gradient(circle, rgba(244, 197, 66, 0.1) 20%, transparent 20%),
+                radial-gradient(circle, rgba(244, 197, 66, 0.1) 20%, transparent 20%);
+            background-size: 60px 60px; /* Beşgenlerin boyutu */
+            background-position: 0 0, 30px 30px, 0 30px, 30px 0px, 15px 15px; /* Beşgenlerin konumları */
+            z-index: 0; /* İçeriğin arkasında olması için */
+        }
     </style>
 </head>
 <body>
