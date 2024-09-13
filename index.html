@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonraki Ayet</title>
+    <link rel="icon" type="image/x-icon" href="images/quran.png">
+    <style>
+      body {
+    font-family: Arial, sans-serif;
+    background-color: #000; /* Siyah arka plan */
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Arka plan deseninin kaymasını engellemek için */
+}
+
+.container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #333;
+    color: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative; /* Konteynerin içinde beşgenlerin düzgün görünmesini sağlamak için */
+    z-index: 1; /* Arka plan desenlerinin üstünde görünmesi için */
+}
+
+h1 {
+    color: #f4c542;
+}
+
+.radio-group {
+    margin: 20px 0;
+}
+
+.radio-group label {
+    display: block;
+    background-color: #f4c542;
+    color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    transition: background-color 0.3s;
+}
+
+.radio-group input {
+    display: none;
+}
+
+.radio-group input:checked + label {
+    background-color: #f4a542;
+}
+
+.radio-group input.error + label {
+    border: 2px solid red;
+}
+
+.radio-group input.correct + label {
+    border: 2px solid green;
+}
+
+button {
+    background-color: #f4c542;
+    border: none;
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #f4a542;
+}
+
+.confetti {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.level-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.level-selector img {
+    width: 100px;
+    height: auto;
+    margin-right: 20px;
+}
+
+.level-selector select {
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f4c542;
+    color: #333;
+    cursor: pointer;
+}
+
+.level-selector select:focus {
+    border-color: #f4a542;
+    outline: none;
+}
+
+.shake {
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+
+footer {
+    background-color: #333;
+    color: #f4f4f4;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    border-top: 1px solid #f4c542;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Arka plan beşgen desenleri */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Hafif soluk siyah arka plan */
+    background-image: 
+        radial-gradient(circle, rgba(244, 197, 66, 0.1) 20%, transparent 20%),
+        radial-gradient(circle, rgba(244, 197, 66, 0.1) 20%, transparent 20%),
+        radial-gradient(circle, rgba(244, 197, 66, 0.1) 20%, transparent 20%),
+        radial-gradient(circle, rgba(244, 197, 66, 0.1) 20%, transparent 20%),
+        radial-gradient(circle, rgba(244, 197, 66, 0.1) 20%, transparent 20%);
+    background-size: 60px 60px; /* Beşgenlerin boyutu */
+    background-position: 0 0, 30px 30px, 0 30px, 30px 0px, 15px 15px; /* Beşgenlerin konumları */
+    z-index: 0; /* İçeriğin arkasında olması için */
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="level-selector">
+            <img id="level-image" src="images/student.png" alt="Level Image">
+            <select id="level-select" onchange="updateLevelImage()">
+                <option value="student">Öğrenci</option>
+                <option value="teacher">Hoca</option>
+                <option value="hafiz">Hafiz</option>
+            </select>
+        </div>
+        <h1 id="question">Soru buraya gelecek</h1>
+        <h2>Ayetin Devamı Hangisidir</h2>
+        <div class="radio-group">
+            <input type="radio" id="option1" name="answer" value="1">
+            <label for="option1">Seçenek 1</label>
+            <input type="radio" id="option2" name="answer" value="2">
+            <label for="option2">Seçenek 2</label>
+            <input type="radio" id="option3" name="answer" value="3">
+            <label for="option3">Seçenek 3</label>
+            <input type="radio" id="option4" name="answer" value="4">
+            <label for="option4">Seçenek 4</label>
+        </div>
+        <button onclick="checkAnswer()">Cevabı Kontrol Et</button>
+        <button onclick="nextQuestion()">Sonraki Soru</button>
+    </div>
+    <div id="confetti" class="confetti"></div>
+    
+    <footer>
+        <p>13.09.2024 | Aks</p>
+    </footer>
+
+    <script src="data/quran.js"></script>
+    <script>
+        // Seviye resimlerini güncelle
+        function updateLevelImage() {
+            const levelSelect = document.getElementById('level-select');
+            const levelImage = document.getElementById('level-image');
+            const value = levelSelect.value;
+            
+            // Seviye seçenekleri için resimlerin URL'leri
+            const images = {
+                student: 'images/student.png',
+                teacher: 'images/teacher.png',
+                hafiz: 'images/hafiz.png'
+            };
+            
+            // Seçilen seviyeye göre resim güncelleme
+            levelImage.src = images[value];
+        }
+
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
+        }
+
+        function getRandomUniqueElements(arr, num) {
+            const result = [];
+            const copy = [...arr];
+            while (result.length < num) {
+                const index = getRandomInt(copy.length);
+                result.push(copy.splice(index, 1)[0]);
+            }
+            return result;
+        }
+
+        function generateQuestion() {
+            const sureIndex = getRandomInt(114);
+            const ayatList = quran[sureIndex.toString()];
+            const correctIndex = getRandomInt(ayatList.length - 1);
+
+            const correctAnswer = ayatList[correctIndex].text;
+
+            const incorrectAnswers = ayatList
+             .filter((_, i) => i !== correctIndex)
+             .map(item => item.text);
+
+            const randomIncorrectAnswers = getRandomUniqueElements(incorrectAnswers, 3);
+
+            const options = [correctAnswer, ...randomIncorrectAnswers];
+
+            options.sort(() => Math.random() - 0.5);
+
+            // Update question and options
+            document.getElementById('question').textContent = ayatList[correctIndex -1].text;
+
+            options.forEach((option, i) => {
+                document.getElementById(`option${i + 1}`).nextElementSibling.textContent = option;
+                document.getElementById(`option${i + 1}`).value = option;
+            });
+
+            // Store correct answer value for checking later
+            document.getElementById('option1').dataset.correct = correctAnswer;
+        }
+
+        function checkAnswer() {
+            const options = document.querySelectorAll('input[name="answer"]');
+            let isCorrect = false;
+
+            options.forEach(option => {
+                option.classList.remove('error', 'correct');
+                if (option.checked) {
+                    if (option.value === document.querySelector('input[name="answer"]').dataset.correct) {
+                        isCorrect = true;
+                        option.classList.add('correct');
+                    } else {
+                        option.classList.add('error');
+                    }
+                }
+            });
+
+            if (isCorrect) {
+                playSound('audio/success.mp3')
+                showConfetti();
+            } else if (!document.querySelector('input[name="answer"]:checked')) {
+                alert('Lütfen bir seçenek işaretleyin.');
+            } else {
+                playSound('audio/error.mp3')
+                shakeScreen();
+            }
+        }
+        
+        function nextQuestion() {
+            // Yeni bir soru oluştur
+            generateQuestion();
+
+            // Tüm radio input'larının işaretlemelerini sıfırla
+            document.querySelectorAll('input[name="answer"]').forEach(input => {
+                input.checked = false;
+                input.classList.remove('error', 'correct'); // Sınıfları kaldır
+            });
+        }
+
+        function showConfetti() {
+            const confetti = document.getElementById('confetti');
+            confetti.style.display = 'block';
+            setTimeout(() => {
+                confetti.style.display = 'none';
+            }, 2000); // Konfeti 2 saniye sonra kaybolur
+        }
+
+        function shakeScreen() {
+            document.body.classList.add('shake');
+            setTimeout(() => {
+                document.body.classList.remove('shake');
+            }, 500); // Ekran 0.5 saniye sallanır
+        }
+
+        function playSound(src) {
+            const audio = new Audio(src);
+            audio.play();
+        }
+
+        // Initialize the quiz
+        document.addEventListener('DOMContentLoaded', generateQuestion);
+    </script>
+</body>
+</html>
